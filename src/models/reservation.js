@@ -61,9 +61,11 @@ export default (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       },
-      status: DataTypes.ENUM("confirmed", "cancelled"),
-      allowNull: false,
-      defaultValue: "confirmed",
+      status: {
+        type: DataTypes.ENUM("confirmed", "cancelled"),
+        allowNull: false,
+        defaultValue: "confirmed",
+      },
     },
     {
       sequelize,

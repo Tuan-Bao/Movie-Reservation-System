@@ -1,7 +1,8 @@
-import db from "../models/index.js";
+import initDB from "../models/index.js";
 import BadRequestError from "../errors/bad_request.js";
 import NotFoundError from "../errors/not_found.js";
 
+const db = await initDB();
 const Showtime = db.Showtime;
 const Movie = db.Movie;
 const Reservation = db.Reservation;

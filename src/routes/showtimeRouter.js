@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/", showtimeController.getAllShowtimes);
 router.get("/:id", showtimeController.getShowTimeById);
-router.get("/:title", showtimeController.getShowTimesByMovieTitle);
+router.get("/movies/:title", showtimeController.getShowTimesByMovieTitle);
 router.post(
   "/",
   authentication,

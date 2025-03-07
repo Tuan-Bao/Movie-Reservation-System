@@ -5,15 +5,24 @@ import authorization from "../middlewares/authorization.js";
 
 const router = express.Router();
 
-router.get("/", reservationController.getAllReservations);
-router.get("/:id", reservationController.getReservationById);
-router.get("/user", authentication, reservationController.getReservationByUser);
-router.post(
+router.get(
   "/",
   authentication,
   authorization(["admin"]),
-  reservationController.createReservation
+  reservationController.getAllReservations
 );
+router.get(
+  "/:id",
+  authentication,
+  authorization(["admin"]),
+  reservationController.getReservationById
+);
+router.get(
+  "/user/history",
+  authentication,
+  reservationController.getReservationByUser
+);
+router.post("/", authentication, reservationController.createReservation);
 router.patch(
   "/:id",
   authentication,
@@ -32,7 +41,7 @@ router.post(
   reservationController.cancelReservation
 );
 router.post(
-  "/:id/amount",
+  "/amount/:id",
   authentication,
   reservationController.calculateReservationAmount
 );

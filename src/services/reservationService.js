@@ -1,7 +1,8 @@
-import db from "../models/index.js";
+import initDB from "../models/index.js";
 import BadRequestError from "../errors/bad_request.js";
 import NotFoundError from "../errors/not_found.js";
 
+const db = await initDB();
 const Reservation = db.Reservation;
 const User = db.User;
 const Showtime = db.Showtime;
@@ -33,8 +34,7 @@ export const getAllReservations = async () => {
 
 export const getReservationById = async (id) => {
   try {
-    const reservation = await Reservation.findByPk({
-      id,
+    const reservation = await Reservation.findByPk(id, {
       include: [
         {
           model: User,
@@ -93,12 +93,7 @@ export const getReservationByUser = async (id) => {
   }
 };
 
-export const createReservation = async ({
-  user_id,
-  showtime_id,
-  seat_id,
-  status,
-}) => {
+export const createReservation = async ({ user_id, showtime_id, seat_id }) => {
   const transaction = await db.sequelize.transaction();
 
   try {
@@ -118,10 +113,12 @@ export const createReservation = async ({
       );
     }
 
-    const existingReservation = await Reservation.findOne({
-      where: { showtime_id, seat_id },
-      transaction,
-    });
+    const existingReservation = await Reservation.findOne(
+      {
+        where: { showtime_id, seat_id },
+      },
+      { transaction }
+    );
     if (existingReservation) {
       throw new BadRequestError("Reservation already exists");
     }
@@ -131,7 +128,6 @@ export const createReservation = async ({
         user_id,
         showtime_id,
         seat_id,
-        status,
       },
       { transaction }
     );
@@ -206,7 +202,14 @@ export const cancelReservation = async (id, user_id) => {
       throw new NotFoundError("Reservation not found");
     }
     const showtime = await Showtime.findByPk(reservation.showtime_id);
-    if (new Date(showtime.start_time) < new Date()) {
+
+    const showtimeDate = new Date(showtime.start_time);
+    const oneDayBeforeShowtime = new Date(
+      showtimeDate.getTime() - 24 * 60 * 60 * 1000
+    );
+    const now = new Date();
+    console.log(oneDayBeforeShowtime, now);
+    if (oneDayBeforeShowtime.getTime < now.getTime()) {
       throw new BadRequestError("Showtime has already started");
     }
     await reservation.update({ status: "cancelled" });
@@ -276,7 +279,8 @@ export const calculateReservationAmount = async (id) => {
     }
 
     const amount =
-      reservation.showtime.ticket_price + reservation.seat.seat_price;
+      parseFloat(reservation.showtime.ticket_price) +
+      parseFloat(reservation.seat.seat_price);
     return {
       id,
       total_amount: amount,

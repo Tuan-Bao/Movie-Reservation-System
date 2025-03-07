@@ -87,6 +87,7 @@ export const deleteUser = async (req, res, next) => {
 export const verifyOTP = async (req, res, next) => {
   try {
     const { email, otp_code } = req.query;
+    // console.log(email, otp_code);
     const result = await userService.verifyOTP({ email, otp_code });
     return res.status(StatusCodes.OK).json({ message: result.message });
   } catch (error) {

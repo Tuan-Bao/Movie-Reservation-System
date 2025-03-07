@@ -3,15 +3,20 @@ import { configDotenv } from "dotenv";
 
 configDotenv({ path: "../.env" });
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASSWORD,
-  },
-});
+// console.log(process.env.EMAIL, process.env.PASSWORD);
 
 export const sendOTP = async (email, otp_code, subject, link) => {
+  const transporter = nodemailer.createTransport({
+    // service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
   try {
     const mailOptions = {
       from: process.env.EMAIL,
@@ -20,7 +25,7 @@ export const sendOTP = async (email, otp_code, subject, link) => {
       html: `
         <p>Hello</p>
         <p>Your OTP code is: <strong>${otp_code}</strong>. OTP Code is valid for 5 minutes.</p>
-        <a href="${link} style="background-color: #008CBA; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">Click here to verify</a>
+        <a href="${link}>Click here to verify</a>
       `,
     };
 

@@ -36,15 +36,14 @@ export const getReservationByUser = async (req, res, next) => {
 
 export const createReservation = async (req, res, next) => {
   try {
-    const { user_id, showtime_id, seat_id, status } = req.body;
-    if (!user_id || !showtime_id || !seat_id || !status) {
+    const { user_id, showtime_id, seat_id } = req.body;
+    if (!user_id || !showtime_id || !seat_id) {
       throw new NotFoundError("Missing required fields");
     }
     const newReservation = await reservationService.createReservation({
       user_id,
       showtime_id,
       seat_id,
-      status,
     });
     return res.status(StatusCodes.CREATED).json({
       message: newReservation.message,

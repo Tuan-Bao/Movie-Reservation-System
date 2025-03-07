@@ -1,11 +1,12 @@
-import db from "../models/index.js";
+import initDB from "../models/index.js";
 import BadRequestError from "../errors/bad_request.js";
 import NotFoundError from "../errors/not_found.js";
-import { sendOTP } from "../utils/email.js";
+import { sendOTP } from "../utils/gmail.js";
 import { configDotenv } from "dotenv";
 
 configDotenv({ path: "../.env" });
 
+const db = await initDB();
 const User = db.User;
 
 export const register = async ({ username, email, password }) => {

@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models.Reservation, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
         as: "reservations",
       });
     }

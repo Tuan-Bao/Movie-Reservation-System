@@ -1,7 +1,8 @@
 import NotFoundError from "../errors/not_found.js";
 import ForbiddenError from "../errors/forbidden.js";
-import db from "../models/index.js";
+import initDB from "../models/index.js";
 
+const db = await initDB();
 const User = db.User;
 
 const authorization = (roles) => async (req, res, next) => {

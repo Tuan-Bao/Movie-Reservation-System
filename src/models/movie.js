@@ -12,7 +12,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Movie.hasMany(models.Showtime, {
-        foreignKey: "movieId",
+        foreignKey: "movie_id",
         as: "showtimes",
       });
     }
