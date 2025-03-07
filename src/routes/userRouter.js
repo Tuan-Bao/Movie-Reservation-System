@@ -29,6 +29,6 @@ router.delete(
 );
 router.get("/verify", userController.verifyOTP);
 router.post("/forgot-password", userController.forgotPassword);
-router.get("/reset-password", userController.resetPassword);
+router.post("/reset-password", userController.resetPassword);
 
 export default router;

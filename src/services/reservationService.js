@@ -208,7 +208,7 @@ export const cancelReservation = async (id, user_id) => {
       showtimeDate.getTime() - 24 * 60 * 60 * 1000
     );
     const now = new Date();
-    console.log(oneDayBeforeShowtime, now);
+    // console.log(oneDayBeforeShowtime, now);
     if (oneDayBeforeShowtime.getTime < now.getTime()) {
       throw new BadRequestError("Showtime has already started");
     }
